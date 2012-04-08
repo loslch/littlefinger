@@ -1,23 +1,20 @@
 {
+  "author": "Hoon <loslch@gmail.com> (http://www.huni.org)",
   "name": "LittleFinger",
   "version": "0.0.1",
-  "private": true,
-  "dependencies": {
-    "express": "2.5.8",
-    "jade": ">= 0.0.1"
+  "homepage": "https://github.com/loslch/littlefinger",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/loslch/littlefinger.git"
   },
+  "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "test": "expresso"
   },
+  "dependencies": {},
   "devDependencies": {},
   "optionalDependencies": {},
   "engines": {
     "node": "*"
-  },
-  "author": "Hoon <loslch@gmail.com> (http://www.huni.org)",
-  "description": "Sangsang-Tour Project",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/loslch/littlefinger.git"
   }
 }
