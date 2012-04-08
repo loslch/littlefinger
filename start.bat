@@ -1,0 +1,1 @@
+supervisor -q -e 'html,css' -w ./mysite,./mysite/routes,./mysite/views,./mysite/public/stylesheets ./mysite/server.js

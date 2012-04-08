@@ -13,7 +13,10 @@ exports.index = function(req, res){
  people = [
     { name: 'Paul', age: 28 },
     { name: 'Jane', age: 26 },
-    { name: 'Jimmy', age: 45 }
+    { name: 'Jimmy', age: 45 },
+    { name: '주향', age: 25 },
+    { name: '현제', age: 24 },
+    { name: '성준', age: 24 },
 ];
 
 exports.people = function(req, res){
