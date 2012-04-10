@@ -1,3 +1,4 @@
 /local_package.csx
 /mysite/bin
 /mysite/server.js.logs
+/mysite/node_modules/.bin
