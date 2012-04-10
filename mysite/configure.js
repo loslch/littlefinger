@@ -3,9 +3,6 @@
  * Initialize server configuration.
  */
 
-var express = require('express');
-var swig = require('swig');
-
 
 // Configuration begin
 
