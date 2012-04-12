@@ -1,8 +1,186 @@
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: 'Sorts Mill Goudy', "Georgia", Times New Roman, Times, serif;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 24px;
+  color: #404040;
+  text-shadow: 0 1px 0 #ffffff;
 }
 
 a {
-  color: #00B7FF;
+  text-decoration: none;
+  line-height: inherit;
+  font-weight: inherit;
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  -ms-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+}
+a:hover {
+  color: #5c1611;
+  text-decoration: underline;
+}
+
+header {
+  padding: 25px 0;
+  background: #fff;
+/*  border-bottom: 2px solid #bfbfbf; */
+  border-bottom: 1px solid #EEE;
+  margin-bottom: 40px;
+}
+header .container {
+  position: relative;
+}
+header h1 {
+  background: url('http://media.mike-robinson.ca/images/logo.png?79243b5dee16') left center no-repeat;
+  color: #404040;
+  font-style: italic;
+  position: relative;
+  top: 10px;
+  padding-left: 60px;
+  line-height: 50px;
+}
+header h1 em {
+  color: #bfbfbf;
+}
+nav {
+  zoom: 1;
+  position: absolute;
+  top: 20px;
+  right: 0;
+}
+nav:before, nav:after {
+  display: table;
+  content: "";
+  zoom: 1;
+  *display: inline;
+}
+nav:after {
+  clear: both;
+}
+nav ul {
+  margin: 0;
+  padding: 0;
+}
+nav ul li {
+  list-style: none;
+  float: left;
+  margin-left: 30px;
+}
+nav ul li a {
+  line-height: 1;
+  color: #000000;
+  text-transform: uppercase;
+  font-size: 14px;
+  display: block;
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  -ms-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #ffffff;
+}
+nav ul li a:hover, nav ul li a.active {
+  color: #000000;
+  padding-bottom: 12px;
+  border-bottom-color: #cccccc;
+  text-decoration: none;
+}
+nav ul li a.active {
+  border-bottom-color: #404040;
+}
+nav ul li a span {
+  display: block;
+  margin: 0;
+  color: #bfbfbf;
+  font-size: 11px;
+}
+nav ul li a span.amp {
+  display: inline;
+}
+ul.project-list {
+  margin: 0 0 60px;
+  list-style: none;
+  zoom: 1;
+}
+ul.project-list:before, ul.project-list:after {
+  display: table;
+  content: "";
+  zoom: 1;
+  *display: inline;
+}
+ul.project-list:after {
+  clear: both;
+}
+ul.project-list li {
+  float: left;
+  margin-right: 20px;
+  width: 220px;
+  height: 240px;
+}
+ul.project-list li.newrow {
+  margin-right: 0;
+}
+ul.project-list li a {
+  color: #404040;
+  -webkit-transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+  -ms-transition: all 0.5s linear;
+  -o-transition: all 0.5s linear;
+  transition: all 0.5s linear;
+  font-size: 16px;
+}
+ul.project-list li a img {
+  display: block;
+  padding: 4px;
+  background: #ffffff;
+  border: 1px solid #bfbfbf;
+  margin-bottom: 10px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -ms-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+}
+ul.project-list li a:hover {
+  color: #9d261d;
+  text-decoration: none;
+}
+ul.project-list li a:hover img {
+  /*.box-shadow(0 0 4px @shadow);*/
+
+  -webkit-transform: scale(1.05);
+  -moz-transform: scale(1.05);
+}
+#main {
+}
+#licence {
+  margin-top: 50px;
+  border-top: 1px solid #EEE;
+  padding: 2em 0;
+}
+
+
+/* The white background content wrapper */
+.login-form {
+  width:300px;
+  margin-left: 65px;
+  color: #5e5e5e;
+}
+.login-form h2 {
+  margin-bottom: 10px;
+}
+section > .container {
+width: 300px;
+}
+section > .container > .content {
+background-color: #fff;
+padding: 20px;
+margin: 0 -20px;
 }

@@ -9,13 +9,6 @@ var swig = require('swig');
 var app = module.exports = express.createServer();
 
 /**
- * Schemas.
- */
-var Mongoose = require('mongoose');
-var db = Mongoose.connect('mongodb://localhost/db');
-require('./schemas');
-
-/**
  * Configuration.
  */
 swig.init({ 
@@ -52,29 +45,15 @@ app.configure('production', function(){
 /**
  * Routes.
  */
-var home = require('./routes/index');
-//var people = require('./routes/people');
+var route = require('./routes');
 
-app.get('/', home.index);
+app.get('/', route.index);
 
-app.get('/people', function(req, res){
-    var People = db.model('people');
+app.get('/login', route.login);
 
-    //res.render('people', { people: people });
-    People.find({}, function(err, people) {
-      res.render('people', { people: people });
-    });
-});
-
-app.get('/people/:id', function(req, res){
-    var People = db.model('people');
-
-    People.find({id: req.params.id}, function(err, person) {
-      console.log(person);
-      res.render('person', { person: person[0] });
-    });
-});
-
+//test
+app.get('/people', route.people);
+app.get('/people/:id', route.person);
 
 /**
  * Server start.

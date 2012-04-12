@@ -3,5 +3,18 @@
 {% block title %}{% parent %} - {{ person.name }}{% endblock %}
 
 {% block body %}
-<p>{{ person.name }} is {{ person.age }} years old.</p>
+<header>
+    <h1>People</h1>
+
+    <nav>
+        <ul>
+            <li><a href="/">Home Page</a></li>
+            <li><a href="/people">People</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section role="main">
+    <p>{{ person.name }} is {{ person.age }} years old.</p>
+</section>
 {% endblock %}

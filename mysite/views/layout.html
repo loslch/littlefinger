@@ -1,24 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <title>{% block title %}{% endblock %}</title>
+  <head>
+    <meta charset="utf-8">
+    <title>Little Finger > {% block title %}{% endblock %}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+ 
+    <!-- Le styles -->
+    <link href="/stylesheets/bootstrap.css" rel="stylesheet">
+    <link href="/stylesheets/style.css" rel="stylesheet">
+    {% block head %}{% endblock %}
 </head>
 <body>
-
     <header>
-        <h1>{% block title %}{% endblock %}</h1>
-        {% block header %}{% endblock %}
+        <div class="container">
+        <h1>Little <em>Finger</em></h1>
         <nav>
             <ul>
-                <li><a href="/">Home Page</a></li>
-                <li><a href="/people">People</a></li>
+                <li><a class="active" href="/">Work <span>Things I've done</span></a></li>
+                <li><a href="/cv/">CV <span>My Resume</span></a></li>
+                <li><a href="/about/">About <span>Me <span class="amp">&amp;</span> this site</span></a></li>
             </ul>
         </nav>
+        </div>
     </header>
-
-    <section role="main">
-        {% block body %}{% endblock %}
-    </section>
+    <div class="container">
+        <section id="main">
+            {% block body %}{% endblock %}
+        </section>
+        <footer>
+            <div id="licence" class="row">
+              <div class="span12">
+                <blockquote>
+                  <h3>Project of Sangsang Tour</h3>
+                  <small>licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License .</small>
+                </blockquote>
+              </div>
+            </div>
+        </footer>
+    </div>
 </body>
 </html>
