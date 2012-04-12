@@ -8,6 +8,12 @@ var express = require('express');
 var swig = require('swig');
 var app = module.exports = express.createServer();
 
+/**
+ * Schemas.
+ */
+var Mongoose = require('mongoose');
+var db = Mongoose.connect('mongodb://localhost/db');
+require('./schemas');
 
 /**
  * Configuration.
@@ -44,54 +50,30 @@ app.configure('production', function(){
 
 
 /**
- * Schemas.
- */
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-
-/**
- * Schema definition
- */
-
-var Person = new Schema({
-    name: {
-        first: String
-      , last : String
-    }
-  , email: { type: String, required: true, index: { unique: true, sparse: true } }
-  , alive: Boolean
-});
-
-/**
- * Methods
- */
-
-
-/**
- * Plugins
- */
-
-
-/**
- * Define model.
- */
-
-mongoose.model('Person', Person);
-
-
-/**
  * Routes.
  */
 var home = require('./routes/index');
-var people = require('./routes/people');
+//var people = require('./routes/people');
 
-// Home
 app.get('/', home.index);
 
-// People
-app.get('/people', people.people);
-app.get('/people/:id', people.person);
+app.get('/people', function(req, res){
+    var People = db.model('people');
+
+    //res.render('people', { people: people });
+    People.find({}, function(err, people) {
+      res.render('people', { people: people });
+    });
+});
+
+app.get('/people/:id', function(req, res){
+    var People = db.model('people');
+
+    People.find({id: req.params.id}, function(err, person) {
+      console.log(person);
+      res.render('person', { person: person[0] });
+    });
+});
 
 
 /**

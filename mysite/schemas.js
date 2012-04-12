@@ -3,17 +3,8 @@
  * Mongo schemas.
  */
 
-var mongoose = require('mongoose')
-  , Schema = mongoose.Schema;
-
-
-/**
- * Mongoose connection helper.
- */
-
-function connect () {
-  return mongoose.createConnection('mongodb://localhost/test');
-}
+var Mongoose = require('mongoose');
+var Schema = Mongoose.Schema;
 
 /**
  * Schema definition
@@ -26,6 +17,14 @@ var Person = new Schema({
     }
   , email: { type: String, required: true, index: { unique: true, sparse: true } }
   , alive: Boolean
+});
+
+var People = new Schema({
+    id: String,
+    password: String,
+    role: String,
+    name: String,
+    age: Number
 });
 
 /**
@@ -42,7 +41,5 @@ var Person = new Schema({
  * Define model.
  */
 
-mongoose.model('Person', Person);
-
-
-exports.mongoose = mongoose;
+//Mongoose.model('Person', Person);
+Mongoose.model('people', People, 'people');

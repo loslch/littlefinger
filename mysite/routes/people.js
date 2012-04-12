@@ -2,7 +2,6 @@
 /**
  * GET people.
  */
- 
  people = [
     { name: 'Paul', age: 28 },
     { name: 'Jane', age: 26 },
@@ -14,7 +13,9 @@
 ];
 
 exports.people = function(req, res){
-    res.render('people', { people: people });
+    //res.render('people', { people: people });
+    var user = User.find();
+    res.render('people', { people: user });
 };
 
 exports.person = function(req, res){
