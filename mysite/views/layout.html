@@ -6,29 +6,37 @@
     <meta name="description" content="">
     <meta name="author" content="">
  
-    <!-- Le styles -->
     <link href="/stylesheets/bootstrap.css" rel="stylesheet">
     <link href="/stylesheets/style.css" rel="stylesheet">
+
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.2.js"></script>
     {% block head %}{% endblock %}
 </head>
 <body>
     <header>
         <div class="container">
-        <h1>Little <em>Finger</em></h1>
-        <nav>
-            <ul>
-                <li><a class="active" href="/">Work <span>Things I've done</span></a></li>
-                <li><a href="/cv/">CV <span>My Resume</span></a></li>
-                <li><a href="/about/">About <span>Me <span class="amp">&amp;</span> this site</span></a></li>
-            </ul>
-        </nav>
+            <div class="row">
+                <h1>
+                    <a href="/"><img src="/images/littlefinger.png" /><span>Little Finger</em></a>
+                </h1>
+                <nav>
+                    <ul>
+                        <li><a class="active" href="/look">Look <span>Find promises</span></a></li>
+                        <li><a href="/draw">Draw up <span>Make a promise</span></a></li>
+                        <li><a href="/penpal">Penpal <span>Meet friends</span></a></li>
+                        <li><a href="/mypage">My Page <span>Your activities</span></a></li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </header>
-    <div class="container">
-        <section id="main">
-            {% block body %}{% endblock %}
-        </section>
-        <footer>
+    <section>
+        <div id="main" class="container">
+                {% block body %}{% endblock %}
+        </div>
+    </section>
+    <footer>
+        <div class="container">
             <div id="licence" class="row">
               <div class="span12">
                 <blockquote>
@@ -37,7 +45,7 @@
                 </blockquote>
               </div>
             </div>
-        </footer>
-    </div>
+        </div>
+    </footer>
 </body>
 </html>
