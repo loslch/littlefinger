@@ -5,6 +5,9 @@
 {% block head %}
 <script type="text/javascript">
     $(function() {
+        var selector = "nav li>a:eq("+Navigation.indexOf('{{title}}')+")";
+        $(selector).addClass('active');
+        
         $("button[type='submit']").click(function() {
             alert('login');
             return false;
