@@ -11,28 +11,27 @@ exports.index = function(req, res){
 };
 
 exports.look = function(req, res){
-    res.render('index', {title: 'look'});
+    res.render('look', {title: 'look'});
 };
 
 exports.draw = function(req, res){
-    res.render('index', {title: 'draw'});
+    res.render('draw', {title: 'draw'});
 };
 
 exports.penpal = function(req, res){
-    res.render('index', {title: 'penpal'});
+    res.render('penpal', {title: 'penpal'});
 };
 
 exports.mypage = function(req, res){
-    res.redirect('/login');
-    //res.render('index', {});
+    res.render('mypage', {title: 'mypage'});
 };
 
 exports.login = function(req, res){
-    res.render('login', {});
+    res.render('login', {title: 'mypage'});
 };
 
 exports.register = function(req, res){
-    res.render('register', {});
+    res.render('register', {title: 'mypage'});
 };
 
 
