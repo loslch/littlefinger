@@ -48,17 +48,13 @@ app.configure('production', function(){
 var route = require('./routes');
 
 app.get('/', route.index);
+app.get('/look', route.look);
+app.get('/draw', route.draw);
+app.get('/penpal', route.penpal);
+app.get('/mypage', route.mypage);
 
 app.get('/login', route.login);
 app.get('/register', route.register);
-
-app.get('/look', route.look);
-
-app.get('/draw', route.draw);
-
-app.get('/penpal', route.penpal);
-
-app.get('/mypage', route.mypage);
 
 //test
 app.get('/people', route.people);
