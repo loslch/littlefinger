@@ -8,9 +8,24 @@
         var selector = "nav li>a:eq("+Navigation.indexOf('{{title}}')+")";
         $(selector).addClass('active');
         
+        $('.auth-form form').bind('keypress', function(e) {
+            if(e.keyCode==13) {
+                $("button[type='submit']").click();  
+                return false;
+            }
+        });
         $("button[type='submit']").click(function() {
-            alert('login');
-            return false;
+            var err = false;
+            $("#elements input").each(function() {
+                if($(this).val() === "") {
+                    alert("Please input a "+$(this).attr("placeholder")+".");
+                    $(this).focus();
+                    err = true;
+                    return false;
+                }
+            });
+
+            if(err) return false;
         });
         $("#signup").click(function() {
             $(window.location).attr('href', '/register');
@@ -22,27 +37,32 @@
 
 {% block body %}
 <div class="container">
-    <div class="content">
-        <div class="row">
-            <div class="login-form">
-                <h2>Log in</h2>
-                <form action="/login" method="post">
-                    <fieldset>
-                        <div id="elements">
-                            <div class="clearfix">
-                                <label for="username">Email address:</label>
-                                <input type="text" placeholder="Username" id="username" name="username">
-                            </div>
-                            <div class="clearfix">
-                                <label for="password">Password:</label>
-                                <input type="password" placeholder="Password" id="password" name="password">
-                            </div>
+    <div class="row">
+        <div class="span4 offset4 auth-form">
+            <h1>Login</h1>
+            <form action="/login" method="post">
+                <fieldset>
+                    <div id="elements">
+                        <div class="clearfix">
+                            <label for="login">Email address:</label>
+                            <input type="text" placeholder="Email" id="login" name="login">
                         </div>
-                        <button class="btn btn-large btn-warning" type="submit">Sign in</button> or <button class="btn btn-small" id="signup">Sign up</button>
-                    </fieldset>
-                </form>
+                        <div class="clearfix">
+                            <label for="password">Password:</label>
+                            <input type="password" placeholder="Password" id="password" name="password">
+                        </div>
+                    </div>
+                    <div id="buttons" class="pull-right">
+                        <button class="btn btn-small" id="signup">Sign up</button>
+                        &nbsp;&nbsp;or&nbsp;&nbsp;
+                        <button class="btn btn-large btn-warning" type="submit">Login</button>
+                    </div>
+                </fieldset>
+            </form>
+            <div id="externalAuth">
+                <span><a href="/auth/facebook">Login using Facebook</a></span>
             </div>
         </div>
     </div>
-</div> <!-- /container -->
+</div>
 {% endblock %}

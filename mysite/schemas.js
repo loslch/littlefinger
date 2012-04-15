@@ -10,13 +10,12 @@ var Schema = Mongoose.Schema;
  * Schema definition
  */
 
-var Person = new Schema({
-    name: {
-        first: String
-      , last : String
-    }
-  , email: { type: String, required: true, index: { unique: true, sparse: true } }
-  , alive: Boolean
+var Users = new Schema({
+  login: { type: String, required: true, index: { unique: true, sparse: true } },
+  password: String,
+  name: String,
+  age: Number,
+  alive: Boolean
 });
 
 var People = new Schema({
@@ -41,5 +40,5 @@ var People = new Schema({
  * Define model.
  */
 
-//Mongoose.model('Person', Person);
 Mongoose.model('people', People, 'people');
+Mongoose.model('users', Users, 'users');

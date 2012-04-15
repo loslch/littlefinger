@@ -8,12 +8,32 @@
         var selector = "nav li>a:eq("+Navigation.indexOf('{{title}}')+")";
         $(selector).addClass('active');
         
-        $("button[type='submit']").click(function() {
-            alert('login');
-            return false;
+        $('.auth-form form').bind('keypress', function(e) {
+            if(e.keyCode==13) {
+                $("button[type='submit']").click();  
+                return false;
+            }
         });
-        $("#signup").click(function() {
-            $(window.location).attr('href', '/register');
+        $("button[type='submit']").click(function() {
+            //var emailRegex = '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$';
+            var err = false;
+            var inputs = $("#elements input").each(function() {
+                if($(this).val() === "") {
+                    alert("Please input a "+$(this).attr("placeholder")+".");
+                    $(this).focus();
+                    err = true;
+                    return false;
+                }
+            });
+            var passwords = inputs.filter("input[type=password]");
+            if(!err && passwords[0].value !== passwords[1].value) {
+                alert("Please check again. Password confirm is different from password.");
+                err = true;
+            }
+            if(err) return false;
+        });
+        $("#cancel").click(function() {
+            history.go(-1);
             return false;
         });
     });
@@ -22,27 +42,37 @@
 
 {% block body %}
 <div class="container">
-    <div class="content">
-        <div class="row">
-            <div class="login-form">
-                <h2>Sign up</h2>
-                <form action="/register" method="post">
-                    <fieldset>
-                        <div id="elements">
-                            <div class="clearfix">
-                                <label for="username">Email address:</label>
-                                <input type="text" placeholder="Username" id="username" name="username">
-                            </div>
-                            <div class="clearfix">
-                                <label for="password">Password:</label>
-                                <input type="password" placeholder="Password" id="password" name="password">
-                            </div>
+    <div class="row">
+        <div class="span4 offset4 auth-form">
+            <h1>Sign up</h1>
+            <form action="/register" method="post">
+                <fieldset>
+                    <div id="elements">
+                        <div class="clearfix">
+                            <label for="login">Email address:</label>
+                            <input type="text" placeholder="Email" id="login" name="login">
                         </div>
-                        <button class="btn btn-large btn-warning" type="submit">Sign in</button> or <button class="btn btn-small" id="signup">Sign up</button>
-                    </fieldset>
-                </form>
-            </div>
+                        <div class="clearfix">
+                            <label for="password">Password:</label>
+                            <input type="password" placeholder="Password" id="password" name="password">
+                        </div>
+                        <div class="clearfix">
+                            <label for="password">Password confirm:</label>
+                            <input type="password" placeholder="Password confirm" id="password2" name="password2">
+                        </div>
+                        <div class="clearfix">
+                            <label for="username">Username:</label>
+                            <input type="text" placeholder="Username" id="username" name="username">
+                        </div>
+                    </div>
+                    <div id="buttons" class="pull-right">
+                        <button class="btn btn-small" id="cancel">Cancel</button>
+                        &nbsp;&nbsp;or&nbsp;&nbsp;
+                        <button class="btn btn-large btn-warning" type="submit" tabindex="0">Sign up</button>
+                    </div>
+                </fieldset>
+            </form>
         </div>
     </div>
-</div> <!-- /container -->
+</div>
 {% endblock %}

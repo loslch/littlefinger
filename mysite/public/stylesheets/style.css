@@ -8,7 +8,6 @@ body {
     font-weight: normal;
     line-height: 24px;
     color: #404040;
-    text-shadow: 0 1px 0 #ffffff;
 }
 a {
     text-decoration: none;
@@ -30,6 +29,22 @@ header {
     background: #fff;
 /* border-bottom: 2px solid #bfbfbf; */
     border-bottom: 1px solid #EEE;
+}
+header #userAction {
+    margin: -25px 0;
+    text-align: right;
+}
+header #userAction>span {
+    color: #bfbfbf;
+    font-family: tahoma;
+    letter-spacing: 3px;
+    font-size: 11px;
+}
+header #userAction>span>a {
+    color: #afafaf;
+    letter-spacing: 0;
+    text-decoration: none;
+    font-weight: bold;
 }
 header .container {
     position: relative;
@@ -157,19 +172,18 @@ ul.project-list li a:hover img {
     -webkit-transform: scale(1.05);
     -moz-transform: scale(1.05);
 }
+section {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    min-height: 630px;
+    overflow: visible;
+}
 section > .container {
-    width: 300px;
 }
 section > .container > .content {
     background-color: #fff;
     padding: 20px;
     margin: 0 -20px;
-}
-#main {
-    padding-top: 30px;
-    padding-bottom: 30px;
-    min-height: 630px;
-    overflow: visible;
 }
 footer {
     bottom: 0;
@@ -185,15 +199,45 @@ footer > .container > #licence {
     padding: 1em 0;
 }
 
-/* The white background content wrapper */
-.login-form {
-    width:300px;
-    margin-left: 65px;
+/* The auth form style */
+.auth-form {
 }
-.login-form h2 {
-    color: ;
+.auth-form h1 {
     margin-bottom: 20px;
 }
-.login-form #elements {
+.auth-form input {
+    width: 285px;
+}
+.auth-form #elements {
     margin-bottom: 20px;
+}
+.auth-form #buttons {
+}
+
+/* home */
+.carousel img {
+    width: 960px;
+    height: 500px;
+}
+.marketing h1 {
+    margin: 36px 0 27px;
+    font-size: 40px;
+    text-align: center;
+}
+.marketing h2 {
+    font-size: 22px;
+}
+.marketing h1, .marketing h2, .marketing h3,  {
+    font-weight: 300;
+}
+.marketing > .marketing-byline {
+    margin: -18px 0 27px;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 24px;
+    color: #999;
+    text-align: center;
+}
+.marketing > .row {
+    margin-bottom: 9px;
 }

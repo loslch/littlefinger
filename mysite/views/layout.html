@@ -10,6 +10,7 @@
     <link href="/stylesheets/style.css" rel="stylesheet">
 
     <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="/scripts/bootstrap.min.js"></script>
     <script type="text/javascript">
         var Navigation = new Array('look','draw','penpal','mypage');
     </script>
@@ -19,6 +20,10 @@
     <header>
         <div class="container">
             <div class="row">
+                <div id="userAction" class="span6 pull-right">
+                    {% if !loggedIn %}<span><a href="/register">Sign up</a> | <a href="/login">Login</a></span>
+                    {% else %}<span><a>Logged in as {{user.login}}</a> | <a href="/logout">Logout</a></span>{% endif %}
+                </div>
                 <h1>
                     <a href="/"><img src="/images/littlefinger.png" /><span>Little Finger</em></a>
                 </h1>
@@ -34,9 +39,7 @@
         </div>
     </header>
     <section>
-        <div id="main" class="container">
-                {% block body %}{% endblock %}
-        </div>
+        {% block body %}{% endblock %}
     </section>
     <footer>
         <div class="container">
