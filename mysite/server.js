@@ -91,10 +91,6 @@ app.dynamicHelpers({
  */
 app.get('/', route.index);
 
-//app.get('/login', route.login);
-//app.get('/register', route.register);
-//app.post('/auth/facebook/callback', route.fbLoginCallback);
-
 app.get('/look', route.look);
 
 app.get('/draw', route.draw);

@@ -3,7 +3,7 @@
  * routes
  */
 var Mongoose    = require('mongoose'), // http://mongoosejs.com/
-    db          = Mongoose.connect('mongodb://localhost/db'),
+    db          = Mongoose.connect('mongodb://USERID:PASSWORD@ds031847.mongolab.com:31847/DBNAME'),
     util        = require('util');
 
 exports.index = function(req, res){
