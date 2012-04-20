@@ -1,22 +1,129 @@
 {% extends 'layout.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}{{title}}{% endblock %}
 
 {% block head %}
+<script src="http://code.jquery.com/ui/1.8.19/jquery-ui.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+    function submitHandler() {
+      var message = confirm("Would you like to register?");
+
+      if(message == true) {
+        var form    = $("form"),
+            title   = form.find("input[id='title']"),
+            what    = form.find("input[id='what']"),
+            when    = form.find("input[id='when']"),
+            where   = form.find("input[id='where']"),
+            who     = form.find("input[id='who']"),
+            article = form.find("textarea[id='article']"),
+            tag     = form.find("input[id='tag']"),
+            verify  = true;
+
+        /// verifications
+        var elements = new Array(title, article);
+        for(var i in elements) {
+          /// error initialize
+          elements[i].parent().parent().removeClass("error");
+          elements[i].siblings("p").html("");
+
+          /// error message push
+          if(elements[i].val() == "") {
+            elements[i].parent().parent().addClass("error");
+            elements[i].siblings("p").html("Please enter a "+ elements[i].attr("id"));
+            verify = false;
+          }
+        }
+
+        if(verify) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     $(function() {
         var selector = "nav li>a:eq("+Navigation.indexOf('{{title}}')+")";
         $(selector).addClass('active');
+
+        $("#when").datepicker();
+
+        $("#cancel").bind('click', function() {
+          var message = confirm("For all too clear, ok?");
+          if(message) {
+            $("form .controls").each(function(idx) {
+              $(this).children().val("");
+            });
+          }
+          return false;
+        });
     });
 </script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.19/themes/base/jquery-ui.css" type="text/css" media="all">
 {% endblock %}
 
 {% block body %}
 <div class="container">
-    <div class="row">
-        <div class="span12">
-            {{title}}
-        </div>
+  <div class="row">
+    <div class="span12">
+      <form class="well form-horizontal" onsubmit="return submitHandler();" action="/draw" method="post">
+        <fieldset>
+          <legend><h2>{{title}}</h2></legend>
+          <div class="control-group">
+            <label class="control-label" for="title">Title</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge span7" id="title" placeHolder="Title" name="title">
+              <p class="help-block"></p>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="what">What?</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="what" placeHolder="What?" name="what">
+              <p class="help-block"></p>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="when">When?</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="when" placeHolder="When?" name="when">
+              <p class="help-block"></p>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="where">Where?</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="where" placeHolder="Where?" name="where">
+              <p class="help-block"></p>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="who">Who?</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="who" placeHolder="Who?" name="who">
+              <p class="help-block"></p>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="article">Article</label>
+            <div class="controls">
+              <textarea class="input-xlarge span8" id="article" rows="15" placeHolder="Article" name="article"></textarea>
+              <p class="help-block"></p>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="tag">Tag</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="tag" placeHolder="Tag" name="tag">
+              <p class="help-block"></p>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-large">Make a promise</button>
+            <button id="cancel" class="btn">Cancel</button>
+          </div>
+        </fieldset>
+      </form>
     </div>
+  </div>
 </div>
 {% endblock %}

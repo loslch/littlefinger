@@ -3,28 +3,55 @@
  * routes
  */
 var Mongoose    = require('mongoose'), // http://mongoosejs.com/
-    db          = Mongoose.connect('mongodb://USERID:PASSWORD@ds031847.mongolab.com:31847/DBNAME'),
+    db          = Mongoose.connect('mongodb://@ds031847.mongolab.com:31847/'),
     util        = require('util');
 
 exports.index = function(req, res){
-    res.render('index', {title: 'home'});
+    res.render('index', {title: 'Home'});
 }
 
 exports.look = function(req, res){
-    res.render('look', {title: 'look'});
+    res.render('look', {title: 'Look'});
 }
 
 exports.draw = function(req, res){
-    res.render('draw', {title: 'draw'});
+    res.render('draw', {title: 'Draw up'});
+}
+
+exports.makePromise = function(req, res){
+    var Promise     = db.model('promises'),
+        instance    = new Promise();
+
+    instance.title              = req.body.title;
+    instance.content.what       = req.body.what;
+    instance.content.when       = req.body.when;
+    instance.content.where      = req.body.where;
+    instance.content.who        = req.body.who;
+    instance.content.article    = req.body.article;
+    instance.tag                = req.body.tag;
+
+    instance.save(function(err, doc) {
+        if(err) {
+            console.log("ERROR: ", err);
+            return;
+        }
+        if(!doc) {
+            console.log("ERROR: ", "not found");
+            return;
+        }
+        console.log("DATA: ", util.inspect(doc));
+    });
+
+    res.redirect('/draw');
 }
 
 exports.penpal = function(req, res){
-    res.render('penpal', {title: 'penpal'});
+    res.render('penpal', {title: 'Penpal'});
 }
 
 exports.mypage = function(req, res){
     if(!req.loggedIn) res.redirect('/login');
-    else res.render('mypage', {title: 'mypage'});
+    else res.render('mypage', {title: 'My page'});
 }
 
 exports.login = function(login, password) {

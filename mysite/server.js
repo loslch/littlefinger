@@ -94,6 +94,7 @@ app.get('/', route.index);
 app.get('/look', route.look);
 
 app.get('/draw', route.draw);
+app.post('/draw', route.makePromise);
 
 app.get('/penpal', route.penpal);
 
