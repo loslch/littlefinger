@@ -4,7 +4,8 @@
  */
 
 var Mongoose  = require('mongoose'),
-    Schema    = Mongoose.Schema;
+    Schema    = Mongoose.Schema,
+    ObjectId  = Schema.ObjectId;
 
 /**
  * Schema definition
@@ -50,7 +51,7 @@ var Promise = new Schema({
     who: String,
     article: String
   },
-  author: String,
+  author: {type: ObjectId, ref: 'users'},
   date: { type: Date, default: Date.now },
   tag: String,
   comments: [Comment],
@@ -121,10 +122,11 @@ Cheer.add({
  */
 
 
+
 /**
  * Define model.
  */
 Mongoose.model('people', People, 'people');
-Mongoose.model('users', User, 'users');
+exports.Users = Mongoose.model('users', User, 'users');
 Mongoose.model('promises', Promise, 'promises');
 Mongoose.model('activities', Activity, 'activities');

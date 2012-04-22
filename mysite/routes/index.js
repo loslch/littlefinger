@@ -2,8 +2,8 @@
 /**
  * routes
  */
-var Mongoose    = require('mongoose'), // http://mongoosejs.com/
-    db          = Mongoose.connect('mongodb://@ds031847.mongolab.com:31847/'),
+var Mongoose    = require('mongoose'),
+    db          = Mongoose.connect('mongodb://USERID:PASSWORD@ds031847.mongolab.com:31847/DBNAME'),
     util        = require('util');
 
 exports.index = function(req, res){
@@ -14,35 +14,90 @@ exports.look = function(req, res){
     res.render('look', {title: 'Look'});
 }
 
+exports.lookPromise = function(req, res){
+    res.render('promise', {title: 'Look', promise: req.params.id});
+}
+
 exports.draw = function(req, res){
-    res.render('draw', {title: 'Draw up'});
+    if(!req.loggedIn) {
+        res.redirect('/login');
+    } else {
+        res.render('draw', {title: 'Draw up'});
+    }
+}
+
+exports.getPromise = function(req, res) {
+    var Promise     = db.model('promises'),
+        query       = Promise.findOne({});
+
+    //query.select(['title', 'author.name', 'date']);
+    query.where('_id').equals(req.params.id);
+    query.populate('author', ['name']);
+    query.run(function(err, doc) {
+        console.log(doc);
+        res.json({
+                id: doc._id,
+                title: doc.title,
+                author: doc.author.name,
+                content: doc.content,
+                tag: doc.tag,
+                date: doc.date
+            });
+    });
+}
+
+exports.getLatestPromises = function(req, res) {
+    var Promise     = db.model('promises'),
+        query       = Promise.find({});
+
+    //query.select(['title', 'author.name', 'date']);
+    query.populate('author', ['name']);
+    query.limit(10).desc('date');
+    query.run(function(err, doc) {
+        var ret = [];
+
+        for(item in doc) {
+            ret.push({
+                id: doc[item]._id,
+                title: doc[item].title,
+                author: doc[item].author.name,
+                date: doc[item].date
+            });
+        }
+        res.json(ret);
+    });
 }
 
 exports.makePromise = function(req, res){
-    var Promise     = db.model('promises'),
-        instance    = new Promise();
+    if(!req.loggedIn) {
+        res.redirect('/login');
+    } else {
+        var Promise     = db.model('promises'),
+            instance    = new Promise();
 
-    instance.title              = req.body.title;
-    instance.content.what       = req.body.what;
-    instance.content.when       = req.body.when;
-    instance.content.where      = req.body.where;
-    instance.content.who        = req.body.who;
-    instance.content.article    = req.body.article;
-    instance.tag                = req.body.tag;
+        instance.title              = req.body.title;
+        instance.content.what       = req.body.what;
+        instance.content.when       = req.body.when;
+        instance.content.where      = req.body.where;
+        instance.content.who        = req.body.who;
+        instance.content.article    = req.body.article;
+        instance.tag                = req.body.tag;
+        instance.author             = req.user._id;
 
-    instance.save(function(err, doc) {
-        if(err) {
-            console.log("ERROR: ", err);
-            return;
-        }
-        if(!doc) {
-            console.log("ERROR: ", "not found");
-            return;
-        }
-        console.log("DATA: ", util.inspect(doc));
-    });
+        instance.save(function(err, doc) {
+            if(err) {
+                console.log("ERROR: ", err);
+                return;
+            }
+            if(!doc) {
+                console.log("ERROR: ", "not found");
+                return;
+            }
+            console.log("DATA: ", util.inspect(doc));
+        });
 
-    res.redirect('/draw');
+        res.redirect('/draw');
+    }
 }
 
 exports.penpal = function(req, res){
@@ -50,13 +105,16 @@ exports.penpal = function(req, res){
 }
 
 exports.mypage = function(req, res){
-    if(!req.loggedIn) res.redirect('/login');
-    else res.render('mypage', {title: 'My page'});
+    if(!req.loggedIn) {
+        res.redirect('/login');
+    } else {
+        res.render('mypage', {title: 'My page'});
+    }
 }
 
 exports.login = function(login, password) {
     var Users    = db.model('users'),
-        promise = this.Promise();
+        promises = this.Promise();
 
     Users.findOne({login: login, password: password}, function(err, doc) {
         if(err) {

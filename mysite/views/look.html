@@ -3,10 +3,25 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block head %}
+<script type="text/javascript" src="http://jquery.github.com/globalize/lib/globalize.js"></script>
+<script type="text/javascript" src="http://jquery.github.com/globalize/lib/cultures/globalize.cultures.js"></script>
 <script type="text/javascript">
     $(function() {
         var selector = "nav li>a:eq("+Navigation.indexOf('{{title}}')+")";
         $(selector).addClass('active');
+
+        // get latest list
+        $.getJSON('/promise/latest', function(data) {
+          if(data.length == 0) return;
+          var latestPromises = $("#latestPromises tbody").empty();
+
+          $.each(data, function(idx, element) {
+            latestPromises.append(
+              $("<tr>").append($("<td>").html("<a href=\"/look/"+element.id+"\">"+element.title+"</a>")
+            .after($("<td>").html(element.author))
+            .after($("<td>").html(Globalize.format( new Date(element.date), 'd' )))));
+          });
+        });
     });
 </script>
 {% endblock %}
@@ -15,7 +30,26 @@
 <div class="container">
     <div class="row">
         <div class="span12">
-            {{title}}
+          <div class="page-header">
+            <h1>{{title}} <small>Find promises of the world.</small></h1>
+          </div>
+          <table id="latestPromises" class="table table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th class="span8">Title</th>
+                <th class="span2">Author</th>
+                <th class="span2">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="3">No data.</td>
+              </tr>
+            </tbody>
+          </table>
+          <div>
+            <button class="btn btn-large" id="getLatest">Get Latest</button>
+          </div>
         </div>
     </div>
 </div>

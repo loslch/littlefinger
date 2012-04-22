@@ -21,7 +21,9 @@ swig.init({
 });
 
 everyauth.helpExpress(app);
-
+everyauth.everymodule.findUserById( function(userId, callback) {
+  schemas.Users.findById(userId, callback);
+});
 everyauth.everymodule.logoutPath('/logout');
 everyauth.everymodule.logoutRedirectPath('/');
 
@@ -92,9 +94,13 @@ app.dynamicHelpers({
 app.get('/', route.index);
 
 app.get('/look', route.look);
+app.get('/look/:id', route.lookPromise);
 
 app.get('/draw', route.draw);
 app.post('/draw', route.makePromise);
+
+app.get('/promise/latest', route.getLatestPromises);
+app.get('/promise/:id', route.getPromise);
 
 app.get('/penpal', route.penpal);
 

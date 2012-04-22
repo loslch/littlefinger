@@ -1,0 +1,97 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block head %}
+<script type="text/javascript" src="http://jquery.github.com/globalize/lib/globalize.js"></script>
+<script type="text/javascript" src="http://jquery.github.com/globalize/lib/cultures/globalize.cultures.js"></script>
+<script type="text/javascript">
+    $(function() {
+        var selector = "nav li>a:eq("+Navigation.indexOf('{{title}}')+")";
+        $(selector).addClass('active');
+
+        $("#cancel").bind('click', function() {
+          history.back(-1);
+        });
+
+        // get promise
+        $.getJSON("/promise/{{promise}}", function(data) {
+          $("#title").val(data.title);
+          $("#what").val(data.content.what);
+          $("#when").val(Globalize.format( new Date(data.content.when), 'd' ));
+          $("#where").val(data.content.where);
+          $("#who").val(data.content.who);
+          $("#article").val(data.content.article);
+          $("#tag").val(data.tag);
+        });
+    });
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="span12">
+          <div class="page-header">
+            <h1>{{title}} <small>Find promises of the world.</small></h1>
+          </div>
+          <form class="well form-horizontal" onsubmit="return false;">
+            <fieldset>
+              <div class="control-group">
+                <label class="control-label" for="title">Title</label>
+                <div class="controls">
+                  <input type="text" class="input-xlarge span7" id="title" placeHolder="Title" name="title">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="what">What?</label>
+                <div class="controls">
+                  <input type="text" class="input-xlarge" id="what" placeHolder="What?" name="what">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="when">When?</label>
+                <div class="controls">
+                  <input type="text" class="input-xlarge" id="when" placeHolder="When?" name="when">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="where">Where?</label>
+                <div class="controls">
+                  <input type="text" class="input-xlarge" id="where" placeHolder="Where?" name="where">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="who">Who?</label>
+                <div class="controls">
+                  <input type="text" class="input-xlarge" id="who" placeHolder="Who?" name="who">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="article">Article</label>
+                <div class="controls">
+                  <textarea class="input-xlarge span8" id="article" rows="15" placeHolder="Article" name="article"></textarea>
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="tag">Tag</label>
+                <div class="controls">
+                  <input type="text" class="input-xlarge" id="tag" placeHolder="Tag" name="tag">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button id="cancel" class="btn">Cancel</button>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
