@@ -6,24 +6,122 @@
 <script type="text/javascript" src="http://jquery.github.com/globalize/lib/globalize.js"></script>
 <script type="text/javascript" src="http://jquery.github.com/globalize/lib/cultures/globalize.cultures.js"></script>
 <script type="text/javascript">
+    function getPromise() {
+      $.getJSON("/promise/{{promise}}", function(data) {
+        $("#title").val(data.title);
+        $("#what").val(data.content.what);
+        $("#when").val(Globalize.format( new Date(data.content.when), 'd' ));
+        $("#where").val(data.content.where);
+        $("#who").val(data.content.who);
+        $("#article").val(data.content.article);
+        $("#tag").val(data.tag);
+      });
+    }
+    function getJoins() {
+      $.getJSON("/promise/{{promise}}/join", function(data) {
+        if(data.length == 0) return;
+
+        var lstJoins = $("#lstJoins").empty();
+
+        $.each(data, function(idx) {
+          lstJoins.append($("<li>").html(data[idx].information.name)
+            .append($("<span>").addClass("pull-right").html( Globalize.format( new Date(data[idx].date), 'd'))) );
+        });
+      });
+    }
+    function getCheers() {
+      $.getJSON("/promise/{{promise}}/cheer", function(data) {
+        if(data.length == 0) return;
+
+        var lstCheers = $("#lstCheers").empty();
+
+        $.each(data, function(idx) {
+          lstCheers.append($("<li>").html(data[idx].user.name)
+            .append($("<span>").addClass("pull-right").html( Globalize.format( new Date(data[idx].date), 'd'))) );
+        });
+      });
+    }
+    function getComments() {
+      $.getJSON("/promise/{{promise}}/comment", function(data) {
+        if(data.length == 0) return;
+
+        var lstComments = $("#lstComments").empty();
+
+        $.each(data, function(idx) {
+          lstComments.append($("<li>").html(data[idx].author.name)
+            .after($("<span>").addClass("").html( data[idx].body ))
+            .after($("<span>").addClass("pull-right").html( Globalize.format( new Date(data[idx].date), 'd')))
+          );
+        });
+      });
+    }
+
     $(function() {
         var selector = "nav li>a:eq("+Navigation.indexOf('{{title}}')+")";
         $(selector).addClass('active');
+
+        $("#join").bind('click', function() {
+          $.ajax({
+            type: "post",
+            url: "/promise/{{promise}}/join/push",
+            dataType: 'json',
+            success: function(XMLHttpRequest, textStatus, errorThrown) {
+              if(XMLHttpRequest.status == "error") {
+                if(XMLHttpRequest.message == "redirect") {
+                  window.location.href = XMLHttpRequest.location;
+                }
+              } else {
+                getJoins();
+              }
+            }
+          });
+        });
+
+        $("#cheer").bind('click', function() {
+          $.ajax({
+            type: "post",
+            url: "/promise/{{promise}}/cheer/push",
+            dataType: 'json',
+            success: function(XMLHttpRequest, textStatus, errorThrown) {
+              if(XMLHttpRequest.status == "error") {
+                if(XMLHttpRequest.message == "redirect") {
+                  window.location.href = XMLHttpRequest.location;
+                }
+              } else {
+                getCheers();
+              }
+            }
+          });
+        });
+
+        $("#frmComment button[type=submit]").bind('click', function() {
+          $.ajax({
+            type: "post",
+            url: "/promise/{{promise}}/comment/write",
+            data: $("#frmComment").serialize(),
+            dataType: 'json',
+            success: function(XMLHttpRequest, textStatus, errorThrown) {
+              if(XMLHttpRequest.status == "error") {
+                if(XMLHttpRequest.message == "redirect") {
+                  window.location.href = XMLHttpRequest.location;
+                }
+              } else {
+                $("#frmComment input").val("");
+                getComments();
+              }
+            }
+          });
+        });
 
         $("#cancel").bind('click', function() {
           history.back(-1);
         });
 
         // get promise
-        $.getJSON("/promise/{{promise}}", function(data) {
-          $("#title").val(data.title);
-          $("#what").val(data.content.what);
-          $("#when").val(Globalize.format( new Date(data.content.when), 'd' ));
-          $("#where").val(data.content.where);
-          $("#who").val(data.content.who);
-          $("#article").val(data.content.article);
-          $("#tag").val(data.tag);
-        });
+        getPromise();
+        getJoins();
+        getCheers();
+        getComments();
     });
 </script>
 {% endblock %}
@@ -87,10 +185,44 @@
                 </div>
               </div>
               <div class="form-actions">
+                <button id="join" class="btn btn-warning btn-large">Join</button>
+                <button id="cheer" class="btn">Cheer!</button>
                 <button id="cancel" class="btn">Cancel</button>
               </div>
             </fieldset>
           </form>
+          <div class="row">
+            <div class="span6">
+              <h3>Who promised</h3>
+              <div class="well">
+                <ul id="lstJoins">
+                  Nobody did not promise
+                </ul>
+              </div>
+            </div>
+            <div class="span6">
+              <h3>Who cheered</h3>
+              <div class="well">
+                <ul id="lstCheers">
+                  Nobody did not cheer
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="span12">
+              <h3>Comments</h3>
+              <div class="well">
+                <form id="frmComment" class="form-inline" onsubmit="return false;">
+                  <input id="body" name="body" type="text" class="input-small span10" placeholder="write a something...">
+                  <button type="submit" class="btn">Write</button>
+                </form>
+                <ul id="lstComments">
+                  no comment
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
 </div>

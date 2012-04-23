@@ -35,7 +35,23 @@
         }
 
         if(verify) {
-          return true;
+          $.ajax({
+            type: "post",
+            url: "/draw",
+            data: form.serialize(),
+            success: function(XMLHttpRequest, textStatus, errorThrown) {
+              if(XMLHttpRequest.status == "error") {
+                if(XMLHttpRequest.message == "redirect") {
+                  window.location.href = XMLHttpRequest.location;
+                }
+              } else {
+                if(XMLHttpRequest.message == "redirect") {
+                  window.location.href = XMLHttpRequest.location;
+                }
+              }
+            }
+          });
+          return false;
         }
       }
       return false;
@@ -65,7 +81,7 @@
 <div class="container">
   <div class="row">
     <div class="span12">
-      <form class="well form-horizontal" onsubmit="return submitHandler();" action="/draw" method="post">
+      <form class="well form-horizontal" onsubmit="return submitHandler();">
         <fieldset>
           <legend><h2>{{title}}</h2></legend>
           <div class="control-group">

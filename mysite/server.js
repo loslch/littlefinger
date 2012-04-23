@@ -92,23 +92,42 @@ app.dynamicHelpers({
  * Routes.
  */
 app.get('/', route.index);
-
 app.get('/look', route.look);
 app.get('/look/:id', route.lookPromise);
-
 app.get('/draw', route.draw);
-app.post('/draw', route.makePromise);
-
-app.get('/promise/latest', route.getLatestPromises);
-app.get('/promise/:id', route.getPromise);
-
 app.get('/penpal', route.penpal);
-
 app.get('/mypage', route.mypage);
 
-//test
-app.get('/people', route.people);
-app.get('/people/:id', route.person);
+
+/**
+ * REST Action route.
+ */
+app.post('/draw', route.makePromise);
+
+app.get('/promise/latest/:limit?', route.getLatestPromises);
+app.get('/promise/hottest/:limit?', route.getHottestPromises);
+app.get('/promise/zone/:contry/:limit?', route.getZonePromises);
+app.get('/promise/search/:keyword/:limit?', route.getSearchPromises);
+app.get('/promise/:id', route.getPromise);
+
+app.get('/promise/:id/join', route.getJoinPromise);
+app.post('/promise/:id/join/push', route.pushJoinPromise);
+app.post('/promise/:id/join/pull', route.pullJoinPromise);
+
+app.get('/promise/:id/cheer', route.getCheerPromise);
+app.post('/promise/:id/cheer/push', route.pushCheerPromise);
+app.post('/promise/:id/cheer/pull', route.pullCheerPromise);
+
+app.get('/promise/:id/comment', route.getComments);
+app.post('/promise/:id/comment/write', route.writeComment);
+app.post('/promise/:id/comment/delete', route.deleteComment);
+
+
+/**
+ * test
+ */
+//app.get('/people', route.people);
+//app.get('/people/:id', route.person);
 
 /**
  * Server start.
