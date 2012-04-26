@@ -3,7 +3,7 @@
  * routes
  */
 var Mongoose    = require('mongoose'),
-    db          = Mongoose.connect('mongodb://USERID:PASSWORD@ds031847.mongolab.com:31847/DBNAME'),
+    db          = Mongoose.connect('mongodb://USER:PASSWORD@ds031847.mongolab.com:31847/DBNAME'),
     util        = require('util');
 
 
@@ -108,7 +108,8 @@ exports.getHottestPromises = function(req, res) {
 
     //query.select(['title', 'author.name', 'date']);
     query.populate('author', ['name']);
-    query.limit(limit).desc('date');
+    // TODO: join, cheer, comment의 수에 따라 포인트 책정. 내림차순 정렬
+    query.limit(limit).sort('joins.length', -1);
     query.run(function(err, doc) {
         if(err) {
             console.log("ERROR: ", err);
@@ -125,6 +126,12 @@ exports.getHottestPromises = function(req, res) {
                 id: doc[item]._id,
                 title: doc[item].title,
                 author: doc[item].author.name,
+                point: {
+                    join: doc[item].joins.length,
+                    cheer: doc[item].cheers.length,
+                    comment: doc[item].comments.length,
+                    value: doc[item].joins.length + doc[item].cheers.length + doc[item].comments.length
+                },
                 date: doc[item].date
             });
         }
@@ -134,10 +141,14 @@ exports.getHottestPromises = function(req, res) {
 exports.getZonePromises = function(req, res) {
     var Promise = db.model('promises'),
         query   = Promise.find({}),
-        limit   = (req.params.limit === 'undefined')? 10: req.params.limit;
+        limit   = (req.params.limit === 'undefined')? 10: req.params.limit,
+        contry  = req.params.contry;
 
+    // TODO: contry를 가지고 근처 지역을 다양하게 보여준다 잘 처리할 필요가 있음
     //query.select(['title', 'author.name', 'date']);
+    query.where('content.where').ne('');
     query.populate('author', ['name']);
+    // TODO: 사용자가 지역을 설정하고 검색하면 주변, 지역, 세계로 구분해서 보여준다.
     query.limit(limit).desc('date');
     query.run(function(err, doc) {
         if(err) {
@@ -155,6 +166,7 @@ exports.getZonePromises = function(req, res) {
                 id: doc[item]._id,
                 title: doc[item].title,
                 author: doc[item].author.name,
+                where: doc[item].content.where,
                 date: doc[item].date
             });
         }
@@ -168,6 +180,7 @@ exports.getSearchPromises = function(req, res) {
 
     //query.select(['title', 'author.name', 'date']);
     query.populate('author', ['name']);
+    // TODO: 검색 키워드에 따라 보여준다. 제목과 내용, 태그를 대상으로 검
     query.limit(limit).desc('date');
     query.run(function(err, doc) {
         if(err) {
@@ -524,7 +537,7 @@ exports.deleteComment = function(req, res) {
  */
 exports.login = function(login, password) {
     var Users    = db.model('users'),
-        promises = this.Promise();
+        promise  = this.Promise();
 
     Users.findOne({login: login, password: password}, function(err, doc) {
         if(err) {

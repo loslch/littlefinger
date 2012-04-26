@@ -241,3 +241,8 @@ footer > .container > #licence {
 .marketing > .row {
     margin-bottom: 9px;
 }
+
+/* look */
+.form-search > .label-form {
+    text-align: right;
+}

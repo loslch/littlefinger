@@ -104,7 +104,10 @@ var Activity = new Schema({
 /**
  * Methods
  */
- 
+// TODO: 어떻게 써야 되는거지?
+Promise.getPoint = function() {
+  return joins.length + cheers.length + comments.length;
+ }
 
 /**
  * Plugins

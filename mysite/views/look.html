@@ -11,12 +11,38 @@
         $(selector).addClass('active');
 
         // get latest list
-        $.getJSON('/promise/latest', function(data) {
+        $.getJSON('/promise/latest/15', function(data) {
           if(data.length == 0) return;
           var latestPromises = $("#latestPromises tbody").empty();
 
           $.each(data, function(idx, element) {
             latestPromises.append(
+              $("<tr>").append($("<td>").html("<a href=\"/look/"+element.id+"\">"+element.title+"</a>")
+            .after($("<td>").html(element.author))
+            .after($("<td>").html(Globalize.format( new Date(element.date), 'd' )))));
+          });
+        });
+
+        // get hottest list
+        $.getJSON('/promise/hottest/5', function(data) {
+          if(data.length == 0) return;
+          var hottestPromises = $("#hottestPromises tbody").empty();
+
+          $.each(data, function(idx, element) {
+            hottestPromises.append(
+              $("<tr>").append($("<td>").html("<a href=\"/look/"+element.id+"\">"+element.title+"</a>")
+            .after($("<td>").html(element.author))
+            .after($("<td>").html(Globalize.format( new Date(element.date), 'd' )))));
+          });
+        });
+
+        // get around list
+        $.getJSON('/promise/zone/near/5', function(data) {
+          if(data.length == 0) return;
+          var aroundPromises = $("#aroundPromises tbody").empty();
+
+          $.each(data, function(idx, element) {
+            aroundPromises.append(
               $("<tr>").append($("<td>").html("<a href=\"/look/"+element.id+"\">"+element.title+"</a>")
             .after($("<td>").html(element.author))
             .after($("<td>").html(Globalize.format( new Date(element.date), 'd' )))));
@@ -30,9 +56,53 @@
 <div class="container">
     <div class="row">
         <div class="span12">
-          <div class="page-header">
-            <h1>{{title}} <small>Find promises of the world.</small></h1>
+          <h3>Find promises</h3>
+          <form class="well form-search">
+            <div class="span1 label-form"><label class="control-label" for="topic"><h4>Topic</h4></label></div>
+            <div class="span3"><input id="topic" name="topic" type="text" class="span3 search-query" placeHolder="ex) Environment"></div>
+            <div class="span1 offset1 label-form"><label class="control-label" for="location"><h4>Location</h4></label></div>
+            <div class="span3"><input id="location" name="location" type="text" class="span3 search-query" placeHolder="ex) Newyork, USA"></div>
+            <div class="span1 offset1"><button type="submit" class="btn btn-warning">Search</button></div>
+          </form>
+
+          <div class="row">
+            <div class="span6">
+              <h3>Hot promises</h3>
+              <table id="hottestPromises" class="table table-bordered table-condensed">
+                <thead>
+                  <tr>
+                    <th class="span8">Title</th>
+                    <th class="span2">Author</th>
+                    <th class="span2">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="3">No data.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="span6">
+              <h3>Look around</h3>
+              <table id="aroundPromises" class="table table-bordered table-condensed">
+                <thead>
+                  <tr>
+                    <th class="span8">Title</th>
+                    <th class="span2">Author</th>
+                    <th class="span2">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="3">No data.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
+
+          <h3>New promises <small>Find promises of the world.</small></h3>
           <table id="latestPromises" class="table table-bordered table-condensed">
             <thead>
               <tr>
