@@ -3,7 +3,7 @@
  * routes
  */
 var Mongoose    = require('mongoose'),
-    db          = Mongoose.connect('mongodb://USER:PASSWORD@ds031847.mongolab.com:31847/DBNAME'),
+//    db          = Mongoose.connect('mongodb://USER:PASSWORD@ds031847.mongolab.com:31847/DBNAME'),
     util        = require('util');
 
 
