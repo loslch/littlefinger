@@ -3,20 +3,106 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block head %}
-<script type="text/javascript">
+  <script src="http://xoxco.com/projects/code/tagsinput/jquery.tagsinput.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://xoxco.com/projects/code/tagsinput/jquery.tagsinput.css" />
+  <script type="text/javascript">
     $(function() {
-        var selector = "nav li>a:eq("+Navigation.indexOf('{{title}}')+")";
+        var selector = "nav li>a:eq("+$.inArray('{{title}}', Navigation)+")";
         $(selector).addClass('active');
+
+        $('#tags').tagsInput({
+         'height':'170px',
+         'width':'650px',
+         'interactive':true
+      });
     });
-</script>
+  </script>
 {% endblock %}
 
 {% block body %}
-<div class="container">
+  <div class="container">
     <div class="row">
         <div class="span12">
-            {{title}}
+          <h2>My Page</h2>
+
+          <div class="row">
+            <div class="span3">
+              <h3>Information</h3>
+              <div class="thumbnail">
+                <img src="http://placehold.it/210x145" alt="">
+                <div class="caption">
+                  <p><strong>Name</strong> <span>Hoon Lee</span></p>
+                  <p><strong>Email</strong> <span>test@mail.com</span></p>
+                  <p><strong>Age</strong> <span>15</span></p>
+                  <p><strong>Location</strong> <span>Seoul, Korea</span></p>
+                  <p>
+                    <a href="#" class="btn btn-warning">Modify</a>
+                    <a href="#" class="btn">Get badge</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="span9">
+              <div class="row">
+                <div class="span9">
+                  <h3>Interests</h3>
+                  <div class="well">
+                    <input name="tags" id="tags" value="Music (singing),Poetry,Dancing,Indoor as well as outdoor sports,Adventure or extreme sports,Fitness or working out in a gym,Car or bike racing,Computer games or programming,Social Networking,Cooking and baking,Diet and nutrition,Knitting,Dancing,Jewelry making,Watching movies" />
+                  </div>
+                </div>
+
+                <div class="span9">
+                  <h3>Active Log</h3>
+                  <table id="activityLog" class="table table-bordered table-condensed">
+                    <thead>
+                      <tr>
+                        <th class="span7">Activity</th>
+                        <th class="span2">Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!--<tr>
+                        <td colspan="3">No data.</td>
+                      </tr>-->
+                      <tr>
+                        <td>Hoon Lee joins "save the water"</td>
+                        <td>5/1/2012</td>
+                      </tr>
+                      <tr>
+                        <td>Hoon Lee cheered up "garduate party"</td>
+                        <td>4/29/2012</td>
+                      </tr>
+                      <tr>
+                        <td>Hoon Lee wrote a article on "guitar concert"</td>
+                        <td>4/28/2012</td>
+                      </tr>
+                      <tr>
+                        <td>Hoon Lee commented on "computer can help everyone."</td>
+                        <td>4/12/2012</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="span9">
+                  <h3>Badges</h3>
+                  <div class="well badges">
+                    <ul class="list">
+                      <li><img src="/images/badge.png">Wrote Article</li>
+                      <li><img src="/images/badge.png">Wrote Article</li>
+                      <li><img src="/images/badge.png">Keeping the promise</li>
+                      <li><img src="/images/badge.png">Wrote Article</li>
+                      <li><img src="/images/badge.png">Keeping the promise</li>
+                      <li><img src="/images/badge.png">Excellent activity</li>
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
         </div>
     </div>
-</div>
+  </div>
 {% endblock %}

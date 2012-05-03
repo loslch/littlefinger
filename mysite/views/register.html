@@ -5,7 +5,7 @@
 {% block head %}
 <script type="text/javascript">
     $(function() {
-        var selector = "nav li>a:eq("+Navigation.indexOf('{{title}}')+")";
+        var selector = "nav li>a:eq("+$.inArray('{{title}}', Navigation)+")";
         $(selector).addClass('active');
         
         $('.auth-form form').bind('keypress', function(e) {

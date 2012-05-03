@@ -5,60 +5,8 @@
 {% block head %}
 <script src="http://code.jquery.com/ui/1.8.19/jquery-ui.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-    function submitHandler() {
-      var message = confirm("Would you like to register?");
-
-      if(message == true) {
-        var form    = $("form"),
-            title   = form.find("input[id='title']"),
-            what    = form.find("input[id='what']"),
-            when    = form.find("input[id='when']"),
-            where   = form.find("input[id='where']"),
-            who     = form.find("input[id='who']"),
-            article = form.find("textarea[id='article']"),
-            tag     = form.find("input[id='tag']"),
-            verify  = true;
-
-        /// verifications
-        var elements = new Array(title, article);
-        for(var i in elements) {
-          /// error initialize
-          elements[i].parent().parent().removeClass("error");
-          elements[i].siblings("p").html("");
-
-          /// error message push
-          if(elements[i].val() == "") {
-            elements[i].parent().parent().addClass("error");
-            elements[i].siblings("p").html("Please enter a "+ elements[i].attr("id"));
-            verify = false;
-          }
-        }
-
-        if(verify) {
-          $.ajax({
-            type: "post",
-            url: "/draw",
-            data: form.serialize(),
-            success: function(XMLHttpRequest, textStatus, errorThrown) {
-              if(XMLHttpRequest.status == "error") {
-                if(XMLHttpRequest.message == "redirect") {
-                  window.location.href = XMLHttpRequest.location;
-                }
-              } else {
-                if(XMLHttpRequest.message == "redirect") {
-                  window.location.href = XMLHttpRequest.location;
-                }
-              }
-            }
-          });
-          return false;
-        }
-      }
-      return false;
-    }
-
     $(function() {
-        var selector = "nav li>a:eq("+Navigation.indexOf('{{title}}')+")";
+        var selector = "nav li>a:eq("+$.inArray('{{title}}', Navigation)+")";
         $(selector).addClass('active');
 
         $("#when").datepicker();
@@ -69,6 +17,58 @@
             $("form .controls").each(function(idx) {
               $(this).children().val("");
             });
+          }
+          return false;
+        });
+        
+        $("form").bind('submit', function() {
+          var message = confirm("Would you like to register?");
+
+          if(message == true) {
+            var form    = $("form"),
+                title   = form.find("input[id='title']"),
+                what    = form.find("input[id='what']"),
+                when    = form.find("input[id='when']"),
+                where   = form.find("input[id='where']"),
+                who     = form.find("input[id='who']"),
+                article = form.find("textarea[id='article']"),
+                tag     = form.find("input[id='tag']"),
+                verify  = true;
+
+            /// verifications
+            var elements = new Array(title, article);
+            for(var i in elements) {
+              /// error initialize
+              elements[i].parent().parent().removeClass("error");
+              elements[i].siblings("p").html("");
+
+              /// error message push
+              if(elements[i].val() == "") {
+                elements[i].parent().parent().addClass("error");
+                elements[i].siblings("p").html("Please enter a "+ elements[i].attr("id"));
+                verify = false;
+              }
+            }
+
+            if(verify) {
+              $.ajax({
+                type: "post",
+                url: "/draw",
+                data: form.serialize(),
+                success: function(XMLHttpRequest, textStatus, errorThrown) {
+                  if(XMLHttpRequest.status == "error") {
+                    if(XMLHttpRequest.message == "redirect") {
+                      window.location.href = XMLHttpRequest.location;
+                    }
+                  } else {
+                    if(XMLHttpRequest.message == "redirect") {
+                      window.location.href = XMLHttpRequest.location;
+                    }
+                  }
+                }
+              });
+              return false;
+            }
           }
           return false;
         });

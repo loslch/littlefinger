@@ -3,20 +3,182 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block head %}
-<script type="text/javascript">
+  <script type="text/javascript" src="http://jquery.github.com/globalize/lib/globalize.js"></script>
+  <script type="text/javascript" src="http://jquery.github.com/globalize/lib/cultures/globalize.cultures.js"></script>
+  <script type="text/javascript">
+    function clickFriend(friend) {
+      $("#friend").val(friend);
+    }
+
     $(function() {
-        var selector = "nav li>a:eq("+Navigation.indexOf('{{title}}')+")";
+        var selector = "nav li>a:eq("+$.inArray('{{title}}', Navigation)+")";
         $(selector).addClass('active');
+
+        // get penpal list
+        $.getJSON('/penpal/list', function(data) {
+          if(data.length == 0) return;
+          var penpalMessages = $("#penpalMessages tbody").empty();
+
+          $.each(data, function(idx, element) {
+            var item = $("<tr>")
+              .append($("<td>").html($("<input type=\"checkbox\">")))
+              .appendTo(penpalMessages);
+            $("<td>").html(element.message)
+              .appendTo(item);
+            $("<td>").html(element.from.name)
+              .appendTo(item);
+            $("<td>").html(Globalize.format( new Date(element.date.substr(0, 10).replace(/-/gi,'/') + " " + element.date.substr(11, 8)), 'd' ))
+                .appendTo(item);
+          });
+        });
+
+        // get friends list
+        $.getJSON('/friend/list/15', function(data) {
+          if(data.length == 0) return;
+          var friendsList = $("#friendsList tbody").empty();
+
+          $.each(data, function(idx, element) {
+            var item = $("<tr>")
+              .append($("<td>").html("<a href=\"#\" onclick=\"clickFriend('"+element.login+"');\">"+element.login+"</a>"))
+              .appendTo(friendsList);
+            $("<td>").html(element.name)
+              .appendTo(item);
+            $("<td>").html(element.age)
+              .appendTo(item);
+          });
+        });
+
+        $("#cancel").bind('click', function() {
+          var message = confirm("For all too clear, ok?");
+          if(message) {
+            $("form .controls").each(function(idx) {
+              $(this).children().val("");
+            });
+          }
+          $("#sendMessage .alert").addClass("hide");
+          return false;
+        });
+        
+        $("form").bind('submit', function() {
+          var message = confirm("Would you like to send message?");
+
+          if(message == true) {
+            var form    = $("form"),
+                friend  = form.find("input[id='friend']"),
+                message = form.find("textarea[id='message']"),
+                verify  = true;
+
+            form.parent().children(".alert").addClass("hide");
+
+            /// verifications
+            var elements = new Array(friend, message);
+            for(var i in elements) {
+              /// error initialize
+              elements[i].parent().parent().removeClass("error");
+              elements[i].siblings("p").remove();
+
+              /// error message push
+              if(elements[i].val() == "") {
+                elements[i].parent().parent().addClass("error");
+                elements[i].after($("<p>").addClass("help-block").html("Please enter a "+ elements[i].attr("id")));
+                verify = false;
+              }
+            }
+
+            if(verify) {
+              $.ajax({
+                type: "post",
+                url: "/penpal/send",
+                data: {
+                  to: friend.val(),
+                  message: message.val()
+                },
+                success: function(XMLHttpRequest, textStatus, errorThrown) {
+                  if(XMLHttpRequest.status == "error") {
+                    form.parent().children(".alert").removeClass("hide").addClass("alert-error").html("<strong>Error!</strong> <span>"+XMLHttpRequest.message+"</span>");
+                  } else if(XMLHttpRequest.status == "success") {
+                    form.parent().children(".alert").removeClass("hide").addClass("alert-success").html("<strong>Well done!</strong> <span>"+XMLHttpRequest.message+"</span>");
+                  } else {
+                    form.parent().children(".alert").addClass("hide");
+                  }
+                }
+              });
+              return false;
+            }
+          }
+          return false;
+        });
     });
-</script>
+  </script>
 {% endblock %}
 
 {% block body %}
-<div class="container">
+  <div class="container">
     <div class="row">
         <div class="span12">
-            {{title}}
+          <h3>Penpal messages</h3>
+          <table id="penpalMessages" class="table table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th class="span1">#</th>
+                <th class="span8">Message</th>
+                <th class="span2">From</th>
+                <th class="span2">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="4">No data.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="row">
+            <div class="span6">
+              <h3>Friends List</h3>
+              <table id="friendsList" class="table table-bordered table-condensed">
+                <thead>
+                  <tr>
+                    <th class="span3">ID</th>
+                    <th class="span2">Name</th>
+                    <th class="span1">Age</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="3">No data.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="span6">
+              <h3>Send a message</h3>
+              <div id="sendMessage" class="well">
+                <div class="alert hide"></div>
+                <form id="frmSendMessage" class="form-horizontal">
+                  <fieldset>
+                    <div class="control-group">
+                      <label class="control-label" for="friend">To</label>
+                        <div class="controls">
+                          <input type="text" class="input-xlarge" id="friend" readonly="true"/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                      <label class="control-label" for="message">Message</label>
+                        <div class="controls">
+                          <textarea class="input-xlarge" id="message" rows="8"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                      <button type="submit" class="btn btn-warning">Send message</button>
+                      <button id="cancel" class="btn">Cancel</button>
+                    </div>
+                  </fieldset>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
-</div>
+  </div>
 {% endblock %}

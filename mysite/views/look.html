@@ -3,11 +3,11 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block head %}
-<script type="text/javascript" src="http://jquery.github.com/globalize/lib/globalize.js"></script>
-<script type="text/javascript" src="http://jquery.github.com/globalize/lib/cultures/globalize.cultures.js"></script>
-<script type="text/javascript">
+  <script type="text/javascript" src="http://jquery.github.com/globalize/lib/globalize.js"></script>
+  <script type="text/javascript" src="http://jquery.github.com/globalize/lib/cultures/globalize.cultures.js"></script>
+  <script type="text/javascript">
     $(function() {
-        var selector = "nav li>a:eq("+Navigation.indexOf('{{title}}')+")";
+        var selector = "nav li>a:eq("+$.inArray('{{title}}', Navigation)+")";
         $(selector).addClass('active');
 
         // get latest list
@@ -16,10 +16,13 @@
           var latestPromises = $("#latestPromises tbody").empty();
 
           $.each(data, function(idx, element) {
-            latestPromises.append(
-              $("<tr>").append($("<td>").html("<a href=\"/look/"+element.id+"\">"+element.title+"</a>")
-            .after($("<td>").html(element.author))
-            .after($("<td>").html(Globalize.format( new Date(element.date), 'd' )))));
+            var item = $("<tr>")
+              .append($("<td>").html("<a href=\"/look/"+element.id+"\">"+element.title+"</a>"))
+              .appendTo(latestPromises);
+            $("<td>").html(element.author)
+              .appendTo(item);
+            $("<td>").html(Globalize.format( new Date(element.date.substr(0, 10).replace(/-/gi,'/') + " " + element.date.substr(11, 8)), 'd' ))
+              .appendTo(item);
           });
         });
 
@@ -29,10 +32,13 @@
           var hottestPromises = $("#hottestPromises tbody").empty();
 
           $.each(data, function(idx, element) {
-            hottestPromises.append(
-              $("<tr>").append($("<td>").html("<a href=\"/look/"+element.id+"\">"+element.title+"</a>")
-            .after($("<td>").html(element.author))
-            .after($("<td>").html(Globalize.format( new Date(element.date), 'd' )))));
+            var item = $("<tr>")
+              .append($("<td>").html("<a href=\"/look/"+element.id+"\">"+element.title+"</a>"))
+              .appendTo(hottestPromises);
+            $("<td>").html(element.author)
+              .appendTo(item);
+            $("<td>").html(Globalize.format( new Date(element.date.substr(0, 10).replace(/-/gi,'/') + " " + element.date.substr(11, 8)), 'd' ))
+                .appendTo(item);
           });
         });
 
@@ -42,18 +48,21 @@
           var aroundPromises = $("#aroundPromises tbody").empty();
 
           $.each(data, function(idx, element) {
-            aroundPromises.append(
-              $("<tr>").append($("<td>").html("<a href=\"/look/"+element.id+"\">"+element.title+"</a>")
-            .after($("<td>").html(element.author))
-            .after($("<td>").html(Globalize.format( new Date(element.date), 'd' )))));
+            var item = $("<tr>")
+              .append($("<td>").html("<a href=\"/look/"+element.id+"\">"+element.title+"</a>"))
+              .appendTo(aroundPromises);
+            $("<td>").html(element.author)
+              .appendTo(item);
+            $("<td>").html(Globalize.format( new Date(element.date.substr(0, 10).replace(/-/gi,'/') + " " + element.date.substr(11, 8)), 'd' ))
+                .appendTo(item);
           });
         });
     });
-</script>
+  </script>
 {% endblock %}
 
 {% block body %}
-<div class="container">
+  <div class="container">
     <div class="row">
         <div class="span12">
           <h3>Find promises</h3>
@@ -122,5 +131,5 @@
           </div>-->
         </div>
     </div>
-</div>
+  </div>
 {% endblock %}

@@ -266,3 +266,53 @@ footer > .container > #licence {
 .form-search > .label-form {
     text-align: right;
 }
+
+/* penpal */
+#sendMessage .control-label {
+    width: 80px;
+}
+#sendMessage .controls {
+    margin-left: 100px;
+}
+#sendMessage .form-horizontal .form-actions {
+    padding-left: 100px;
+}
+
+/* mypage */
+#tags_tagsinput {
+    background: transparent;
+    border-color: transparent;
+}
+#tags_tagsinput input {
+    border: 1px solid #CCC;
+    background: white;
+}
+
+.badges ul.list {
+    margin: 0px;
+    padding: 4px 0px 0px 9px;
+}
+.badges ol,
+.badges ul,
+.badges li,
+.badges dl,
+.badges dt,
+.badges dd {
+    list-style: none;
+}
+.badges ul.list li {
+    width: 105px;
+    height: 125px;
+    margin: 0px;
+    padding: 5px 10px 10px;
+    vertical-align: top;
+    text-align:center;
+    display:inline-block; 
+    overflow: hidden;
+}
+.badges ul.list li img { 
+    width: 88px;
+    display: block;
+    margin:0 auto;
+    padding-bottom:5px;
+}​

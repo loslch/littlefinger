@@ -12,30 +12,34 @@ exports.index = function(req, res) {
 }
 
 exports.look = function(req, res) {
-    res.render('look', {title: 'Look'});
+    res.render('look', {title: 'look'});
 }
 
 exports.lookPromise = function(req, res) {
-    res.render('promise', {title: 'Look', promise: req.params.id});
+    res.render('promise', {title: 'look', promise: req.params.id});
 }
 
 exports.draw = function(req, res){
     if(!req.loggedIn) {
         res.redirect('/login');
     } else {
-        res.render('draw', {title: 'Draw up'});
+        res.render('draw', {title: 'draw'});
     }
 }
 
 exports.penpal = function(req, res) {
-    res.render('penpal', {title: 'Penpal'});
+    if(!req.loggedIn) {
+        res.redirect('/login');
+    } else {
+        res.render('penpal', {title: 'penpal'});
+    }
 }
 
 exports.mypage = function(req, res) {
     if(!req.loggedIn) {
         res.redirect('/login');
     } else {
-        res.render('mypage', {title: 'My page'});
+        res.render('mypage', {title: 'mypage'});
     }
 }
 
@@ -43,6 +47,45 @@ exports.mypage = function(req, res) {
 /***
  * REST Action below
  */
+exports.getFriends = function(req, res) {
+    var Penpals = db.model('users'),
+        query   = Penpals.find({}),
+        limit   = (req.params.limit === 'undefined')? 10: req.params.limit;
+
+    //query.select(['title', 'author.name', 'date']);
+    //query.populate('author', ['name']);
+    query.where('alive').equals(true);
+    query.limit(limit);
+    query.run(function(err, doc) {
+        if(err) {
+            console.log("ERROR: ", err);
+            res.json({
+                status: "error",
+                message: "connection error"
+            });
+            return;
+        }
+        if(!doc) {
+            console.log("ERROR: ", "not found");
+            res.json({
+                status: "error",
+                message: "data is not found"
+            });
+            return;
+        }
+        var ret = [];
+
+        for(item in doc) {
+            ret.push({
+                login: doc[item].login,
+                name: doc[item].name,
+                age: doc[item].age
+            });
+        }
+        res.json(ret);
+    });
+}
+
 exports.getPromise = function(req, res) {
     var Promise     = db.model('promises'),
         query       = Promise.findOne({});
@@ -53,10 +96,18 @@ exports.getPromise = function(req, res) {
     query.run(function(err, doc) {
         if(err) {
             console.log("ERROR: ", err);
+            res.json({
+                status: "error",
+                message: "connection error"
+            });
             return;
         }
         if(!doc) {
             console.log("ERROR: ", "not found");
+            res.json({
+                status: "error",
+                message: "data is not found"
+            });
             return;
         }
         console.log(doc);
@@ -82,10 +133,18 @@ exports.getLatestPromises = function(req, res) {
     query.run(function(err, doc) {
         if(err) {
             console.log("ERROR: ", err);
+            res.json({
+                status: "error",
+                message: "connection error"
+            });
             return;
         }
         if(!doc) {
             console.log("ERROR: ", "not found");
+            res.json({
+                status: "error",
+                message: "data is not found"
+            });
             return;
         }
         var ret = [];
@@ -113,10 +172,18 @@ exports.getHottestPromises = function(req, res) {
     query.run(function(err, doc) {
         if(err) {
             console.log("ERROR: ", err);
+            res.json({
+                status: "error",
+                message: "connection error"
+            });
             return;
         }
         if(!doc) {
             console.log("ERROR: ", "not found");
+            res.json({
+                status: "error",
+                message: "data is not found"
+            });
             return;
         }
         var ret = [];
@@ -153,10 +220,18 @@ exports.getZonePromises = function(req, res) {
     query.run(function(err, doc) {
         if(err) {
             console.log("ERROR: ", err);
+            res.json({
+                status: "error",
+                message: "connection error"
+            });
             return;
         }
         if(!doc) {
             console.log("ERROR: ", "not found");
+            res.json({
+                status: "error",
+                message: "data is not found"
+            });
             return;
         }
         var ret = [];
@@ -185,10 +260,18 @@ exports.getSearchPromises = function(req, res) {
     query.run(function(err, doc) {
         if(err) {
             console.log("ERROR: ", err);
+            res.json({
+                status: "error",
+                message: "connection error"
+            });
             return;
         }
         if(!doc) {
             console.log("ERROR: ", "not found");
+            res.json({
+                status: "error",
+                message: "data is not found"
+            });
             return;
         }
         var ret = [];
@@ -229,10 +312,18 @@ exports.makePromise = function(req, res) {
         instance.save(function(err, doc) {
             if(err) {
                 console.log("ERROR: ", err);
+                res.json({
+                    status: "error",
+                    message: "connection error"
+                });
                 return;
             }
             if(!doc) {
                 console.log("ERROR: ", "not found");
+                res.json({
+                    status: "error",
+                    message: "data is not found"
+                });
                 return;
             }
             console.log("DATA: ", util.inspect(doc));
@@ -251,6 +342,7 @@ exports.getJoinPromise = function(req, res) {
 
     query.run(function(err, doc) {
         if(err) {
+            console.log("ERROR: ", err);
             res.json({
                 status: "error",
                 message: "connection error"
@@ -258,6 +350,7 @@ exports.getJoinPromise = function(req, res) {
             return;
         }
         if(!doc) {
+            console.log("ERROR: ", "not found");
             res.json({
                 status: "error",
                 message: "data is not found"
@@ -282,6 +375,7 @@ exports.pushJoinPromise = function(req, res) {
 
         Promise.findById(req.params.id, function(err, doc) {
             if(err) {
+                console.log("ERROR: ", err);
                 res.json({
                     status: "error",
                     message: "connection error"
@@ -289,6 +383,7 @@ exports.pushJoinPromise = function(req, res) {
                 return;
             }
             if(!doc) {
+                console.log("ERROR: ", "not found");
                 res.json({
                     status: "error",
                     message: "data is not found"
@@ -320,7 +415,7 @@ exports.pushJoinPromise = function(req, res) {
                     console.log("ERROR: ", "not found");
                     res.json({
                         status: "error",
-                        message: "data not found"
+                        message: "data is not found"
                     });
                     return;
                 }
@@ -351,6 +446,7 @@ exports.getCheerPromise = function(req, res) {
     query.populate('cheers.user', ['name']);
     query.run(function(err, doc) {
         if(err) {
+            console.log("ERROR: ", err);
             res.json({
                 status: "error",
                 message: "connection error"
@@ -358,6 +454,7 @@ exports.getCheerPromise = function(req, res) {
             return;
         }
         if(!doc) {
+            console.log("ERROR: ", "not found");
             res.json({
                 status: "error",
                 message: "data is not found"
@@ -382,6 +479,7 @@ exports.pushCheerPromise = function(req, res) {
 
         Promise.findById(req.params.id, function(err, doc) {
             if(err) {
+                console.log("ERROR: ", err);
                 res.json({
                     status: "error",
                     message: "connection error"
@@ -389,6 +487,7 @@ exports.pushCheerPromise = function(req, res) {
                 return;
             }
             if(!doc) {
+                console.log("ERROR: ", "not found");
                 res.json({
                     status: "error",
                     message: "data is not found"
@@ -413,7 +512,7 @@ exports.pushCheerPromise = function(req, res) {
                     console.log("ERROR: ", "not found");
                     res.json({
                         status: "error",
-                        message: "data not found"
+                        message: "data is not found"
                     });
                     return;
                 }
@@ -444,6 +543,7 @@ exports.getComments = function(req, res) {
     query.populate('comments.author', ['name']);
     query.run(function(err, doc) {
         if(err) {
+            console.log("ERROR: ", err);
             res.json({
                 status: "error",
                 message: "connection error"
@@ -451,6 +551,7 @@ exports.getComments = function(req, res) {
             return;
         }
         if(!doc) {
+            console.log("ERROR: ", "not found");
             res.json({
                 status: "error",
                 message: "data is not found"
@@ -475,6 +576,7 @@ exports.writeComment = function(req, res) {
 
         Promise.findById(req.params.id, function(err, doc) {
             if(err) {
+                console.log("ERROR: ", err);
                 res.json({
                     status: "error",
                     message: "connection error"
@@ -482,6 +584,7 @@ exports.writeComment = function(req, res) {
                 return;
             }
             if(!doc) {
+                console.log("ERROR: ", "not found");
                 res.json({
                     status: "error",
                     message: "data is not found"
@@ -507,7 +610,7 @@ exports.writeComment = function(req, res) {
                     console.log("ERROR: ", "not found");
                     res.json({
                         status: "error",
-                        message: "data not found"
+                        message: "data is not found"
                     });
                     return;
                 }
@@ -611,6 +714,109 @@ exports.registerValidation = function(newUserAttributes) {
     return null;
     //var errors = validate(login, password, extraParams);
     //return errors;
+}
+
+exports.getMessages = function(req, res) {
+    if(!req.loggedIn) {
+        res.json({
+            status: "error",
+            message: "redirect",
+            location: "/login"
+        });
+        return;
+    } else {
+        var User    = db.model('users'),
+            query   = User.findById(req.user._id);
+
+        query.populate('penpals.from', ['name', 'login']);
+        query.run(function(err, doc) {
+            if(err) {
+                console.log("ERROR: ", err);
+                res.json({
+                    status: "error",
+                    message: "connection error"
+                });
+                return;
+            }
+            if(!doc) {
+                console.log("ERROR: ", "not found");
+                res.json({
+                    status: "error",
+                    message: "data is not found"
+                });
+                return;
+            }
+
+            console.log(doc.penpals);
+            res.json(doc.penpals);
+        });
+    }
+}
+
+exports.sendMessage = function(req, res) {
+    if(!req.loggedIn) {
+        res.json({
+            status: "error",
+            message: "redirect",
+            location: "/login"
+        });
+        return;
+    } else {
+        console.log(req.body);
+        var Friend  = db.model('users'),
+            Penpal  = db.model('penpal'),
+            query   = Friend.findOne({login: req.body.to, alive: true});
+
+        query.run(function(err, doc) {
+            if(err) {
+                console.log("ERROR: ", err);
+                res.json({
+                    status: "error",
+                    message: "connection error"
+                });
+                return;
+            }
+            if(!doc) {
+                console.log("ERROR: ", "not found");
+                res.json({
+                    status: "error",
+                    message: "data is not found"
+                });
+                return;
+            }
+            console.log(doc);
+
+            var penpal = new Penpal();
+            
+            penpal.from = req.user._id;
+            penpal.message = req.body.message;
+            doc.penpals.push(penpal);
+
+            doc.save(function(err, doc) {
+                if(err) {
+                    console.log("ERROR: ", err);
+                    res.json({
+                        status: "error",
+                        message: "connection error"
+                    });
+                    return;
+                }
+                if(!doc) {
+                    console.log("ERROR: ", "not found");
+                    res.json({
+                        status: "error",
+                        message: "data is not found"
+                    });
+                    return;
+                }
+                res.json({
+                    status: "success",
+                    message: "Message has been sent successfully."
+                });
+                console.log("DATA: ", util.inspect(doc));
+            });
+        });
+    }
 }
 
 

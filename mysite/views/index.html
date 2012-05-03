@@ -3,11 +3,11 @@
 {% block title %}Home{% endblock %}
 
 {% block head %}
-<script type="text/javascript" src="http://jquery.github.com/globalize/lib/globalize.js"></script>
-<script type="text/javascript" src="http://jquery.github.com/globalize/lib/cultures/globalize.cultures.js"></script>
-<script type="text/javascript">
+  <script type="text/javascript" src="http://jquery.github.com/globalize/lib/globalize.js"></script>
+  <script type="text/javascript" src="http://jquery.github.com/globalize/lib/cultures/globalize.cultures.js"></script>
+  <script type="text/javascript">
     $(function() {
-        var selector = "nav li>a:eq("+Navigation.indexOf('{{title}}')+")";
+        var selector = "nav li>a:eq("+$.inArray('{{title}}', Navigation)+")";
         $(selector).addClass('active');
 
         $('.carousel').carousel({
@@ -20,86 +20,89 @@
           var latestPromises = $("#latestPromises tbody").empty();
 
           $.each(data, function(idx, element) {
-            latestPromises.append(
-              $("<tr>").append($("<td>").html("<a href=\"/look/"+element.id+"\">"+element.title+"</a>")
-            .after($("<td>").html(element.author))
-            .after($("<td>").html(Globalize.format( new Date(element.date), 'd' )))));
+            var item = $("<tr>")
+              .append($("<td>").html("<a href=\"/look/"+element.id+"\">"+element.title+"</a>"))
+              .appendTo(latestPromises);
+            $("<td>").html(element.author)
+              .appendTo(item);
+            $("<td>").html(Globalize.format( new Date(element.date.substr(0, 10).replace(/-/gi,'/') + " " + element.date.substr(11, 8)), 'd' ))
+              .appendTo(item);
           });
         });
 
         $("#tweets").liveTwitter('littlefinger', {limit: 5, imageSize: 32, rate: 5000});
     });
-</script>
-<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-carousel.js"></script>
-<script type="text/javascript" src="http://elektronaut.github.com/jquery.livetwitter/cdn/jquery.livetwitter-1.7.0.min.js"></script>
+  </script>
+  <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-carousel.js"></script>
+  <script type="text/javascript" src="http://elektronaut.github.com/jquery.livetwitter/cdn/jquery.livetwitter-1.7.0.min.js"></script>
 {% endblock %}
 
 {% block body %}
-<div class="container">
-  <div class="span12">
-    <div id="myCarousel" class="carousel slide">
-      <div class="carousel-inner">
-        <div class="item active">
-          <img src="http://farm2.staticflickr.com/1020/4725375883_de452f6de4_b.jpg" alt="" ref="http://www.flickr.com/photos/jonas_in_china/">
-          <div class="carousel-caption">
-            <h4>First Thumbnail label</h4>
-            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+  <div class="container">
+    <div class="span12">
+      <div id="myCarousel" class="carousel slide">
+        <div class="carousel-inner">
+          <div class="item active">
+            <img src="http://farm2.staticflickr.com/1020/4725375883_de452f6de4_b.jpg" alt="" ref="http://www.flickr.com/photos/jonas_in_china/">
+            <div class="carousel-caption">
+              <h4>First Thumbnail label</h4>
+              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+            </div>
+          </div>
+          <div class="item">
+            <img src="http://farm7.staticflickr.com/6009/6019067180_87b7b8ae1b_b.jpg" alt="" ref="http://www.flickr.com/photos/cheriejphotos/">
+            <div class="carousel-caption">
+              <h4>Second Thumbnail label</h4>
+              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+            </div>
+          </div>
+          <div class="item">
+            <img src="http://farm7.staticflickr.com/6028/5978713288_750b0d4c22_b.jpg" alt="" ref="http://www.flickr.com/photos/imaginecup/">
+            <div class="carousel-caption">
+              <h4>Third Thumbnail label</h4>
+              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+            </div>
           </div>
         </div>
-        <div class="item">
-          <img src="http://farm7.staticflickr.com/6009/6019067180_87b7b8ae1b_b.jpg" alt="" ref="http://www.flickr.com/photos/cheriejphotos/">
-          <div class="carousel-caption">
-            <h4>Second Thumbnail label</h4>
-            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-          </div>
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
+      </div>
+      <div class="row">
+        <div class="span12">
+        <h3>Find promises</h3>
+          <form class="well form-search">
+            <div class="span1 label-form"><label class="control-label" for="topic"><h4>Topic</h4></label></div>
+            <div class="span3"><input id="topic" name="topic" type="text" class="span3 search-query" placeHolder="ex) Environment"></div>
+            <div class="span1 offset1 label-form"><label class="control-label" for="location"><h4>Location</h4></label></div>
+            <div class="span3"><input id="location" name="location" type="text" class="span3 search-query" placeHolder="ex) Newyork, USA"></div>
+            <div class="span1 offset1"><button type="submit" class="btn btn-warning">Search</button></div>
+          </form>
         </div>
-        <div class="item">
-          <img src="http://farm7.staticflickr.com/6028/5978713288_750b0d4c22_b.jpg" alt="" ref="http://www.flickr.com/photos/imaginecup/">
-          <div class="carousel-caption">
-            <h4>Third Thumbnail label</h4>
-            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-          </div>
+        <div class="span6">
+          <h3>New promises</h3>
+          <table id="latestPromises" class="table table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th class="span8">Title</th>
+                <th class="span2">Author</th>
+                <th class="span2">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="3">No data.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </div>
-      <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
-      <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
-    </div>
-    <div class="row">
-      <div class="span12">
-      <h3>Find promises</h3>
-        <form class="well form-search">
-          <div class="span1 label-form"><label class="control-label" for="topic"><h4>Topic</h4></label></div>
-          <div class="span3"><input id="topic" name="topic" type="text" class="span3 search-query" placeHolder="ex) Environment"></div>
-          <div class="span1 offset1 label-form"><label class="control-label" for="location"><h4>Location</h4></label></div>
-          <div class="span3"><input id="location" name="location" type="text" class="span3 search-query" placeHolder="ex) Newyork, USA"></div>
-          <div class="span1 offset1"><button type="submit" class="btn btn-warning">Search</button></div>
-        </form>
-      </div>
-      <div class="span6">
-        <h3>New promises</h3>
-        <table id="latestPromises" class="table table-bordered table-condensed">
-          <thead>
-            <tr>
-              <th class="span8">Title</th>
-              <th class="span2">Author</th>
-              <th class="span2">Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="3">No data.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="span6">
-        <h3>Recent activities</h3>
-        <div class="well">
-          <div id="tweets">
+        <div class="span6">
+          <h3>Recent activities</h3>
+          <div class="well">
+            <div id="tweets">
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 {% endblock %}

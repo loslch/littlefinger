@@ -28,7 +28,7 @@ var Penpal = new Schema({
   from: {type: ObjectId, ref: 'users'},
   message: String,
   date: { type: Date, default: Date.now },
-  received: Boolean
+  received: { type: Boolean, default: false }
 });
 var Badge = new Schema({
   from: {type: ObjectId, ref: 'users'},
@@ -120,9 +120,13 @@ Promise.getPoint = function() {
  */
 Mongoose.model('people', People, 'people');
 
-Mongoose.model('promises', Promise, 'promises');
-Mongoose.model('activities', Activity, 'activities');
 Mongoose.model('join', Join);
 Mongoose.model('cheer', Cheer);
 Mongoose.model('comment', Comment);
+Mongoose.model('friend', Friend);
+Mongoose.model('penpal', Penpal);
+Mongoose.model('badge', Badge);
+
+Mongoose.model('promises', Promise, 'promises');
+Mongoose.model('activities', Activity, 'activities');
 exports.Users   = Mongoose.model('users', User, 'users');

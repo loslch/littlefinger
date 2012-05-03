@@ -122,6 +122,11 @@ app.get('/promise/:id/comment', route.getComments);
 app.post('/promise/:id/comment/write', route.writeComment);
 app.post('/promise/:id/comment/delete', route.deleteComment);
 
+app.get('/friend/list/:limit?', route.getFriends);
+
+app.get('/penpal/list', route.getMessages)
+app.post('/penpal/send', route.sendMessage);
+
 
 /**
  * test
